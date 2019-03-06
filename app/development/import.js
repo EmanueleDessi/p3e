@@ -5,7 +5,9 @@ import '@polymer/polymer/lib/elements/dom-bind';
 import '@polymer/iron-icons/iron-icons';
 import '../style/app-style';
 
-import '../elements/layout/p3e-layout'
-import '../elements/demo-elements/demo-elements'
+import '../elements/layout/p3e-layout';
+import '../elements/layout/menu-layout';
+import '../elements/layout/daisy-layout';
+import '../elements/demo-elements/demo-elements';
 
 

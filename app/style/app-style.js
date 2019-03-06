@@ -152,13 +152,13 @@ const template = html`
             @apply --layout-vertical;
         }
 
-        .layout-flex-auto {
-            @apply  --layout-flex-auto;
-        }
-
         .layout-menu {
             width: var(--menu-width);
             border-right: var(--divider-color) solid 1px;
+        }
+
+        .layout-menu-vertical{
+            @apply --layout-menu-vertical;
         }
 
         .layout-center-aligned {

@@ -1,4 +1,4 @@
-import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 import '@polymer/app-media/app-media-devices';
 import '@polymer/app-media/app-media-video';
@@ -23,6 +23,8 @@ import '@polymer/paper-tabs/paper-tabs'
 import '@polymer/paper-toast/paper-toast'
 import '@polymer/paper-toggle-button/paper-toggle-button'
 import '@polymer/paper-tooltip/paper-tooltip';
+
+import 'paper-collapse-item/paper-collapse-item';
 
 import '@webcomponents/webcomponentsjs/';
 
@@ -49,6 +51,7 @@ class DemoElements extends PolymerElement {
             
                 .container {
                     margin-bottom: 40px;
+                    padding-left: 20px;
                 }
                 
                 .section {
@@ -111,6 +114,16 @@ class DemoElements extends PolymerElement {
                 paper-dialog {
                     height: 300px;
                     width: 300px;
+                }
+
+                .paper-collapse-item {
+                    min-width: 500px;
+                    margin: 0 auto;
+                }
+
+                .paper-collapse-item-content{
+                    max-width: 500px;
+                    white-space: pre-wrap;
                 }
                 
             </style>
@@ -241,7 +254,12 @@ class DemoElements extends PolymerElement {
                         </div>
                     </paper-dialog>
                 </div>
-                 <div class="paper-media section">
+                <div class="paper-collapse-item section" tabindex="21">
+                    <paper-collapse-item icon="icons:polymer" header="Suca">
+                        <div class="paper-collapse-item-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae porta enim. Aliquam dapibus suscipit nunc nec vehicula. Sed rhoncus risus eget nibh posuere, quis rutrum enim faucibus. Mauris et euismod quam. Suspendisse eget quam sapien. Morbi at urna nec arcu facilisis ullamcorper. In hac habitasse platea dictumst. Ut laoreet est sit amet urna sodales, eu cursus nisi sollicitudin. Nullam et convallis ligula. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id dui ut massa gravida sagittis eget ac dui. Nam cursus dapibus lacus, nec porta nunc malesuada at. Aenean ac est ipsum. Mauris accumsan diam felis, vitae ultrices nisi viverra sit amet.</div>
+                    </paper-collapse-item>
+                </div>
+                <div class="paper-media section">
                     <app-media-devices
                         kind="videoinput"
                         selected-device="{{camera}}">

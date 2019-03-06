@@ -75,12 +75,12 @@ class Application {
             webPreferences: {
                 nodeIntegration: true,
             },
-            titleBarStyle: 'hidden',
-            autoHideMenuBar: true,
+            // titleBarStyle: 'hidden',
+            // autoHideMenuBar: true,
             icon: path.join(__dirname, 'style/icon/polymer-logo.png'),
             title: `P3E`,
-            width: 500,
-            height: 1200
+            width: 900,
+            height: 1000
         });
 
         if (this.environment === 'development') {

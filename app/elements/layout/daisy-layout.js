@@ -3,6 +3,7 @@ import '../daisy-elements/button-element/button-element.js';
 import '../daisy-elements/result-element/result-element.js';
 import '../daisy-elements/dynamic-list-element/dynamic-list-element.js';
 import '../daisy-elements/dynamic-input/dynamic-input.js';
+import '../daisy-elements/paper-autocomplete-custom/paper-autocomplete-custom.js';
 
 /**
  * @customElement
@@ -47,6 +48,9 @@ class DaisyLayout extends PolymerElement {
             <dynamic-input on-add-player="addPlayer"></dynamic-input>
             </div>
         </div>
+        <paper-autocomplete id="suffix" source="[[players]]" class="autocomplete-states" label="Search Something" text-property="name" value-property="numberShirt">
+            <paper-icon-button slot="suffix" suffix icon="search"></paper-icon-button>
+        </paper-autocomplete>
     `;
     }
 
@@ -59,15 +63,18 @@ class DaisyLayout extends PolymerElement {
                 value: [
                     {
                         numberShirt: 35,
-                        name: 'KD'
+                        name: 'KD',
+                        text: 'vaffamoc'
                     },
                     {
                         numberShirt: 30,
-                        name: 'Curry'
+                        name: 'Curry',
+                        text: 'giusto'
                     },
                     {
                         numberShirt: 11,
-                        name: 'Culo'
+                        name: 'Culo',
+                        text: 'fatti due domande'
                     },
                 ]
             }

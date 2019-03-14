@@ -91,8 +91,7 @@ class PaperAutocomplete extends PolymerElement {
                             aria-controls="autocompleteStatus suggestionsWrapper">
 
                         <slot name="prefix" slot="prefix"></slot>
-                        <!-- TODO: remove tabindex workaround when  is fixed https://github.com/PolymerElements/paper-input/issues/324 -->
-                        <paper-icon-button slot="suffix" suffix id="clear" icon="clear" on-click="_clear" tabindex="-1"></paper-icon-button>
+                        <paper-icon-button slot="suffix" suffix id="clear" icon="clear" on-click="_clear"></paper-icon-button>
                         <slot name="suffix" slot="suffix"></slot>
                     </paper-input>
                     <!-- to announce current selection to screen reader -->
@@ -103,8 +102,6 @@ class PaperAutocomplete extends PolymerElement {
                                                 id="paperAutocompleteSuggestions"
                                                 min-length="[[minLength]]"
                                                 text-property="[[textProperty]]"
-                                                value-property="[[valueProperty]]"
-                                                selected-option="{{selectedOption}}"
                                                 source="[[source]]"
                                                 remote-source="[[remoteSource]]"
                                                 query-fn="[[queryFn]]"
@@ -231,14 +228,6 @@ class PaperAutocomplete extends PolymerElement {
             },
 
             /**
-             * Property of local datasource to as the value property
-             */
-            valueProperty: {
-                type: String,
-                value: 'value'
-            },
-
-            /**
              * `value` Selected object from the suggestions
              */
             value: {
@@ -349,6 +338,18 @@ class PaperAutocomplete extends PolymerElement {
                 value: false
             },
 
+            /**
+             * Object containing the information of the currently selected option
+             */
+            selectedOption: {
+                type: Object,
+                notify: true
+            },
+
+            defaultValue: {
+                type: Object
+            },
+
             /*************
             * PRIVATE
             *************/
@@ -367,14 +368,6 @@ class PaperAutocomplete extends PolymerElement {
             _isSuggestionsOpened: {
                 type: Boolean,
                 value: false
-            },
-
-            /**
-             * Object containing the information of the currently selected option
-             */
-            selectedOption: {
-                type: Object,
-                notify: true
             }
         }
     }
@@ -382,10 +375,16 @@ class PaperAutocomplete extends PolymerElement {
     ready() {
         super.ready();
 
-        this.addEventListener(
+        console.warn('autocomplete' + this.eventNamespace + 'selected');
+        
+        this.$.paperAutocompleteSuggestions.addEventListener(
             'autocomplete' + this.eventNamespace + 'selected',
             this._onAutocompleteSelected.bind(this)
         );
+
+        if(this.defaultValue){
+            this._setOption(this.defaultValue);
+        }
     }
 
     _sourceChanged(newSource) {
@@ -433,13 +432,12 @@ class PaperAutocomplete extends PolymerElement {
         var event = 'autocomplete' + this.eventNamespace + evt;
 
         this.dispatchEvent(new CustomEvent(event, {
-            details:
+            detail:
             {
                 id: id,
-                value: option[this.valueProperty] || option.value,
+                value: option,
                 text: option[this.textProperty] || option.text,
-                target: this,
-                option: option
+                target: this
             }
         }));
     }
@@ -459,8 +457,7 @@ class PaperAutocomplete extends PolymerElement {
      * On autocomplete selection
      */
     _onAutocompleteSelected(evt) {
-        var selection = event.detail;
-
+        var selection = evt.detail;
         this.value = selection.value;
         this.text = selection.text;
     }
@@ -499,6 +496,17 @@ class PaperAutocomplete extends PolymerElement {
         return id;
     }
 
+    /**
+     * Sets the current text/value option of the input
+     * @param {Object} option
+     */
+    _setOption(option) {
+        //value is option and selectOption... fuck.. to try
+        this.text = option[this.textProperty] || option.text;
+        this.value = option;
+        this._showClearButton();
+    }
+
     /****************************
      * PUBLIC
      ****************************/
@@ -512,16 +520,6 @@ class PaperAutocomplete extends PolymerElement {
             text: this.text,
             value: this.value
         };
-    }
-
-    /**
-     * Sets the current text/value option of the input
-     * @param {Object} option
-     */
-    setOption(option) {
-        this.text = option[this.textProperty] || option.text;
-        this.value = option[this.valueProperty] || option.value;
-        this._showClearButton();
     }
 
     /**
@@ -543,6 +541,7 @@ class PaperAutocomplete extends PolymerElement {
      * @param {Array} arr
      */
     suggestions(arr) {
+        console.warn(arr);
         this.$.paperAutocompleteSuggestions.suggestions(arr);
     }
 

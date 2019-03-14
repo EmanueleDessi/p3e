@@ -84,21 +84,6 @@ class PaperAutocompleteSuggestions extends PolymerElement {
                 <!-- Custom template -->
                 <slot id="templates" name="autocomplete-custom-template"></slot>
             </div>
-            <!-- <script>
-                var DIRECTION = {
-                    UP: 'up',
-                    DOWN: 'down'
-                };
-
-                var KEY_CODES = {
-                    LEFT_ARROW: 37,
-                    RIGHT_ARROW: 39,
-                    UP_ARROW: 38,
-                    DOWN_ARROW: 40,
-                    ENTER: 13,
-                    ESCAPE: 27
-                };
-            </script> -->
         `
     }
 
@@ -135,14 +120,6 @@ class PaperAutocompleteSuggestions extends PolymerElement {
             textProperty: {
                 type: String,
                 value: 'text'
-            },
-
-            /**
-             * Property of local datasource to as the value property
-             */
-            valueProperty: {
-                type: String,
-                value: 'value'
             },
 
             /**
@@ -191,14 +168,6 @@ class PaperAutocompleteSuggestions extends PolymerElement {
                 value: {},
                 notify: true
             },
-
-            // /**
-            //  * Function used to filter available items. This function is actually used by paper-autocomplete-suggestions,
-            //  * it is also exposed here so it is possible to provide a custom queryFn.
-            //  */
-            // queryFn: {
-            //     type: Function
-            // },
 
             /**
              * If `true`, it will always highlight the first result each time new suggestions are presented.
@@ -341,8 +310,6 @@ class PaperAutocompleteSuggestions extends PolymerElement {
         // TODO: find a way to achieve this without modifying Polymer internal properties
         this._suggestionTemplate.__dataHost = this;
         templatize(this.$.defaultTemplate, this);
-        // console.warn(templatize(this.$.defaultTemplate, this));
-        // this.templatize(this._suggestionTemplate);
     }
 
     connectedCallback(){
@@ -426,6 +393,8 @@ class PaperAutocompleteSuggestions extends PolymerElement {
             value: value
         };
 
+        console.warn(option);
+
         if (value && value.length >= this.minLength) {
             this._fireEvent(option, 'change');
         } else {
@@ -479,13 +448,12 @@ class PaperAutocompleteSuggestions extends PolymerElement {
      *    in case no suggestions need to be rendered, you should either not call this method or provide an empty array.
      */
     _renderSuggestions(suggestions) { //ONLY POLYMER 3.X
-        console.warn(suggestions);
         var suggestionsContainer = this.$.suggestionsWrapper;
 
         this._clearSuggestions();
         //change foreach function in arrowFunction
-        console.warn([].slice.call(suggestions));
         suggestions.forEach((result, index) => {
+            console.warn(result);
             // clone the template and bind with the model, in Polymer 3 it's possible to be templetaize only one once
             let template = this.$.defaultTemplate; //use element not className
             if (template.__templatizeOwner) { //PORCATA?? [lo scopriremo solo vivendo]
@@ -546,12 +514,10 @@ class PaperAutocompleteSuggestions extends PolymerElement {
         var selectedOption = this._suggestions[index];
 
         this._input.value = selectedOption[this.textProperty];
-        this.selectedOption = selectedOption;
 
-        this._value = this.value;
+        this._value = selectedOption;
         this._text = this.text;
         this._emptyItems();
-
         this._fireEvent(selectedOption, 'selected');
 
         this.hideSuggestions();
@@ -720,7 +686,7 @@ class PaperAutocompleteSuggestions extends PolymerElement {
             option: option,
             elementId: elementId,
             textValue: option[this.textProperty],
-            value: option[this.valueProperty]
+            value: option
         };
     }
 
@@ -728,21 +694,21 @@ class PaperAutocompleteSuggestions extends PolymerElement {
         var id = this._getId();
         var event = 'autocomplete' + this.eventNamespace + evt;
 
+        console.warn(option);
+        console.warn(event);
+
         this.dispatchEvent(new CustomEvent(event, {
-            details: {
+            detail: {
                 id: id,
-                value: option[this.valueProperty] || option.value,
-                text: option[this.textProperty] || option.text,
-                target: this,
-                option: option
+                value: option,
+                text: option[this.textProperty],
+                target: this
             }
         }));
     }
 
     _onSelect(event) {
-        console.warn(event.currentTarget);
-        var index = modelForElement(event.currentTarget).index;
-        this._selection(index);
+        this._selection(event.target.index);
     }
 
     /**
@@ -829,7 +795,7 @@ class PaperAutocompleteSuggestions extends PolymerElement {
 
             if (typeof item === 'object') {
                 objText = item[this.textProperty];
-                objValue = item[this.valueProperty];
+                objValue = item;
             } else {
                 objText = item.toString();
                 objValue = objText;
@@ -840,7 +806,7 @@ class PaperAutocompleteSuggestions extends PolymerElement {
                 // might need to return more data
                 var resultItem = {};
                 resultItem[this.textProperty] = objText;
-                resultItem[this.valueProperty] = objValue;
+                resultItem.objValue = objValue;
                 queryResult.push(resultItem);
             }
         }.bind(this));

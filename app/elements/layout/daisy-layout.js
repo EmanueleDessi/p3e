@@ -48,9 +48,10 @@ class DaisyLayout extends PolymerElement {
             <dynamic-input on-add-player="addPlayer"></dynamic-input>
             </div>
         </div>
-        <paper-autocomplete id="suffix" source="[[players]]" class="autocomplete-states" label="Search Something" text-property="name" value-property="numberShirt">
+        <paper-autocomplete id="suffix" class="autocomplete-states" source="[[players]]" default-value="[[playerDefault]]" label="Search Something" min-length="2" text-property="name">
             <paper-icon-button slot="suffix" suffix icon="search"></paper-icon-button>
         </paper-autocomplete>
+        <paper-input label="test" value="{{stringValue}}"></paper-input>
     `;
     }
 
@@ -77,6 +78,18 @@ class DaisyLayout extends PolymerElement {
                         text: 'fatti due domande'
                     },
                 ]
+            },
+            playerDefault: {
+                type: Object,
+                value: {
+                    numberShirt: 35,
+                    name: 'KD',
+                    text: 'vaffamoc'
+                }
+            },
+            stringValue: {
+                type: String,
+                value: 'tua madre'
             }
         }
     }
